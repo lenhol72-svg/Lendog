@@ -22,3 +22,5 @@ shape = SubResource("RectangleShape2D_i3pqv")
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1525185240]
 
 [node name="dash_timer" type="Timer" parent="." unique_id=1929162881]
+
+[node name="dash_cooldown_timer" type="Timer" parent="." unique_id=244752022]
