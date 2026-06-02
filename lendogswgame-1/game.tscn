@@ -1,3 +1,13 @@
 [gd_scene format=3 uid="uid://d3s3e35lb1g7p"]
 
-[node name="game" type="Node2D" unique_id=552601084]
+[ext_resource type="Script" uid="uid://yfut5uw234tv" path="res://game.gd" id="1_e2o6t"]
+[ext_resource type="PackedScene" uid="uid://dq0ts5osfcbhy" path="res://player.tscn" id="2_feb5d"]
+
+[node name="Node2D" type="Node2D" unique_id=552601084]
+script = ExtResource("1_e2o6t")
+
+[node name="CharacterBody2D" parent="." unique_id=663960458 instance=ExtResource("2_feb5d")]
+
+[node name="Label" type="Label" parent="." unique_id=2050076551]
+offset_right = 40.0
+offset_bottom = 23.0
