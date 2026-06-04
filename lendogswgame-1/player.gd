@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 # === SETTINGS ===
-const SPEED = 200.0
+const SPEED = 800.0
 const DASH_SPEED = 600.0
 const DASH_DURATION = 0.15
 const DASH_COOLDOWN = 1.0
@@ -10,7 +10,7 @@ const MAX_HEALTH = 100
 # === BULLET ===
 # Drag your bullet.tscn into this variable in the Inspector
 @export var bullet_scene: PackedScene
-
+@onready var gun_point: Marker2D = $GunPoint
 # === STATE ===
 var health = MAX_HEALTH
 var is_dashing = false
@@ -18,7 +18,7 @@ var dash_timer = 0.0
 var dash_cooldown_timer = 0.0
 var dash_direction = Vector2.ZERO
 
-func _process(delta):
+func _physics_process(delta: float) -> void:
 	# === ROTATE PLAYER TO FACE MOUSE ===
 	look_at(get_global_mouse_position())
 
@@ -36,7 +36,7 @@ func _process(delta):
 		if dash_timer <= 0:
 			is_dashing = false
 
-func _physics_process(delta):
+
 	# === GET MOVEMENT INPUT ===
 	var direction = Vector2.ZERO
 	if Input.is_action_pressed("move_right"):
@@ -66,9 +66,10 @@ func _physics_process(delta):
 
 	move_and_slide()
 
+
 func shoot():
 	# Spawn bullet at the GunPoint marker
-	var gun_point = $GunPoint
+	
 	var bullet = bullet_scene.instantiate()
 	# Add bullet to the main scene so it doesn't move with the player
 	get_tree().current_scene.add_child(bullet)

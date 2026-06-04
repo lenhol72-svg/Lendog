@@ -2,6 +2,7 @@ extends Node2D
 
 # === Drag zombie.tscn here in the Inspector ===
 @export var zombie_scene: PackedScene
+@onready var score_label: Label = $CharacterBody2D/Camera2D/ScoreLabel
 
 # === SETTINGS ===
 const SPAWN_INTERVAL = 2.0   # seconds between spawns
@@ -18,7 +19,7 @@ func _process(delta):
 		spawn_timer = SPAWN_INTERVAL
 
 	# === UPDATE SCORE DISPLAY ===
-	$ScoreLabel.text = "Score: " + str(score)
+	$CharacterBody2D/Camera2D/ScoreLabel.text = "Score: " + str(score)
 
 func spawn_zombie():
 	var zombie = zombie_scene.instantiate()
