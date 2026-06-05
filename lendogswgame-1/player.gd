@@ -1,43 +1,37 @@
 extends CharacterBody2D
 
-# === SETTINGS ===
 const SPEED = 800.0
 const DASH_SPEED = 600.0
 const DASH_DURATION = 0.15
 const DASH_COOLDOWN = 1.0
 const MAX_HEALTH = 100
 
-# === BULLET ===
-# Drag your bullet.tscn into this variable in the Inspector
 @export var bullet_scene: PackedScene
-@onready var gun_point: Marker2D = $GunPoint
-# === STATE ===
+
 var health = MAX_HEALTH
 var is_dashing = false
 var dash_timer = 0.0
 var dash_cooldown_timer = 0.0
 var dash_direction = Vector2.ZERO
 
-func _physics_process(delta: float) -> void:
-	# === ROTATE PLAYER TO FACE MOUSE ===
+func _ready():
+	add_to_group("player")
+
+func _process(delta):
 	look_at(get_global_mouse_position())
 
-	# === SHOOT ON CLICK ===
 	if Input.is_action_just_pressed("shoot"):
 		shoot()
 
-	# === DASH COOLDOWN TICK ===
 	if dash_cooldown_timer > 0:
 		dash_cooldown_timer -= delta
 
-	# === DASH TIMER TICK ===
 	if is_dashing:
 		dash_timer -= delta
 		if dash_timer <= 0:
 			is_dashing = false
 
-
-	# === GET MOVEMENT INPUT ===
+func _physics_process(delta):
 	var direction = Vector2.ZERO
 	if Input.is_action_pressed("move_right"):
 		direction.x += 1
@@ -48,17 +42,14 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_pressed("move_up"):
 		direction.y -= 1
 
-	# Normalize so diagonal isn't faster
 	direction = direction.normalized()
 
-	# === START DASH ===
 	if Input.is_action_just_pressed("dash") and dash_cooldown_timer <= 0 and direction != Vector2.ZERO:
 		is_dashing = true
 		dash_timer = DASH_DURATION
 		dash_cooldown_timer = DASH_COOLDOWN
 		dash_direction = direction
 
-	# === APPLY VELOCITY ===
 	if is_dashing:
 		velocity = dash_direction * DASH_SPEED
 	else:
@@ -66,15 +57,15 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
-
 func shoot():
-	# Spawn bullet at the GunPoint marker
+	if bullet_scene == null:
+		print("ERROR: Bullet Scene not assigned in Inspector!")
+		return
 	
+	var gun_point = $GunPoint
 	var bullet = bullet_scene.instantiate()
-	# Add bullet to the main scene so it doesn't move with the player
 	get_tree().current_scene.add_child(bullet)
 	bullet.global_position = gun_point.global_position
-	# Bullet travels toward the mouse
 	bullet.direction = (get_global_mouse_position() - gun_point.global_position).normalized()
 
 func take_damage(amount):

@@ -15,6 +15,11 @@ run/main_scene="uid://d3s3e35lb1g7p"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
+[global_group]
+
+player=""
+zombies=""
+
 [input]
 
 move_left={

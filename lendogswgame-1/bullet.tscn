@@ -8,6 +8,8 @@ radius = 14.110355
 height = 28.22071
 
 [node name="Area2D" type="Area2D" unique_id=100592802]
+position = Vector2(56, 32)
+scale = Vector2(0.04007403, 0.1390368)
 script = ExtResource("1_v8qja")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1807227828]

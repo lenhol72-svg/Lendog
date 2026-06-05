@@ -1,22 +1,14 @@
 [gd_scene format=3 uid="uid://d3s3e35lb1g7p"]
 
-[ext_resource type="Script" uid="uid://yfut5uw234tv" path="res://game.gd" id="1_e2o6t"]
 [ext_resource type="PackedScene" uid="uid://d25h5kwlcst8k" path="res://Zombie.tscn" id="2_fc0e3"]
 [ext_resource type="PackedScene" uid="uid://dq0ts5osfcbhy" path="res://player.tscn" id="2_feb5d"]
-[ext_resource type="PackedScene" uid="uid://xsjbdm8n6bu3" path="res://bullet.tscn" id="4_fc0e3"]
 
 [node name="Node2D" type="Node2D" unique_id=552601084]
-script = ExtResource("1_e2o6t")
-zombie_scene = ExtResource("2_fc0e3")
 
 [node name="CharacterBody2D" parent="." unique_id=663960458 instance=ExtResource("2_feb5d")]
-bullet_scene = ExtResource("4_fc0e3")
 
-[node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=1922708204]
-zoom = Vector2(0.5, 0.5)
-
-[node name="ScoreLabel" type="Label" parent="CharacterBody2D/Camera2D" unique_id=2050076551]
+[node name="Label" type="Label" parent="." unique_id=732978712]
 offset_right = 40.0
 offset_bottom = 23.0
 
-[node name="Area2D" parent="." unique_id=100592802 instance=ExtResource("4_fc0e3")]
+[node name="Area2D" parent="." unique_id=1912125797 instance=ExtResource("2_fc0e3")]

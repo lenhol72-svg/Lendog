@@ -1,19 +1,23 @@
 [gd_scene format=3 uid="uid://dq0ts5osfcbhy"]
 
 [ext_resource type="Texture2D" uid="uid://53r0fb64bm8u" path="res://assets/image-removebg-preview.png" id="1_4flbx"]
-[ext_resource type="Script" uid="uid://rghy66bwarb8" path="res://player.gd" id="1_onrkg"]
+[ext_resource type="Script" uid="uid://bnpoum5u5li05" path="res://bullet.gd" id="1_onrkg"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_onrkg"]
-radius = 246.13005
+radius = 256.44498
 
-[node name="CharacterBody2D" type="CharacterBody2D" unique_id=663960458]
+[node name="CharacterBody2D" type="CharacterBody2D" unique_id=663960458 groups=["player"]]
 script = ExtResource("1_onrkg")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1387558512]
+scale = Vector2(0.40000117, 0.4000012)
 texture = ExtResource("1_4flbx")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=425759900]
+scale = Vector2(0.39999986, 0.4224602)
 shape = SubResource("CircleShape2D_onrkg")
 
+[node name="Camera2D" type="Camera2D" parent="." unique_id=506294422]
+
 [node name="GunPoint" type="Marker2D" parent="." unique_id=1936698161]
-position = Vector2(260, 0)
+position = Vector2(-1, 0)

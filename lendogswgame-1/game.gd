@@ -1,35 +1,39 @@
 extends Node2D
 
-# === Drag zombie.tscn here in the Inspector ===
 @export var zombie_scene: PackedScene
-@onready var score_label: Label = $CharacterBody2D/Camera2D/ScoreLabel
 
-# === SETTINGS ===
-const SPAWN_INTERVAL = 2.0   # seconds between spawns
-const SPAWN_DISTANCE = 400.0 # how far off screen zombies appear
+const SPAWN_INTERVAL = 2.0
+const SPAWN_DISTANCE = 500.0
 
 var score = 0
 var spawn_timer = 0.0
 
+func _ready():
+	if zombie_scene == null:
+		print("ERROR: Zombie Scene not assigned in Inspector!")
+
 func _process(delta):
-	# === SPAWN TIMER ===
 	spawn_timer -= delta
 	if spawn_timer <= 0:
 		spawn_zombie()
 		spawn_timer = SPAWN_INTERVAL
 
-	# === UPDATE SCORE DISPLAY ===
-	$CharacterBody2D/Camera2D/ScoreLabel.text = "Score: " + str(score)
+	$ScoreLabel.text = "Score: " + str(score)
 
 func spawn_zombie():
+	if zombie_scene == null:
+		return
+	
 	var zombie = zombie_scene.instantiate()
 	add_child(zombie)
 
-	# Spawn at a random position around the edge of the screen
-	var screen_size = get_viewport_rect().size
-	var center = screen_size / 2
-	var angle = randf() * TAU  # random angle in a full circle
-	zombie.global_position = center + Vector2(cos(angle), sin(angle)) * SPAWN_DISTANCE
+	var player = get_tree().get_first_node_in_group("player")
+	if player == null:
+		return
+	
+	var angle = randf() * TAU
+	var spawn_pos = player.global_position + Vector2(cos(angle), sin(angle)) * SPAWN_DISTANCE
+	zombie.global_position = spawn_pos
 
 func zombie_killed():
 	score += 10
