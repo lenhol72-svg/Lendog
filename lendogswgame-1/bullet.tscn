@@ -3,21 +3,16 @@
 [ext_resource type="Script" uid="uid://bnpoum5u5li05" path="res://bullet.gd" id="1_v8qja"]
 [ext_resource type="Texture2D" uid="uid://cggokqlbo0jsy" path="res://assets/png-transparent-flying-bullets-flying-bullets-bullet-arms-thumbnail-removebg-preview.png" id="2_t4vbm"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2b2rl"]
-radius = 14.110355
-height = 28.22071
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_v7oki"]
 
-[node name="Area2D" type="Area2D" unique_id=100592802]
-position = Vector2(56, 32)
-scale = Vector2(0.04007403, 0.1390368)
+[node name="Area2D" type="Area2D" unique_id=2082571031]
+scale = Vector2(0.019600488, 0.34470147)
 script = ExtResource("1_v8qja")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1807227828]
-position = Vector2(4.5, 0)
-scale = Vector2(1.025, 1)
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=755309367]
 texture = ExtResource("2_t4vbm")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1531189814]
-position = Vector2(-2, -3.0000005)
-scale = Vector2(-12.401844, 1.5878905)
-shape = SubResource("CapsuleShape2D_2b2rl")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=762696785]
+position = Vector2(-8, -3)
+scale = Vector2(16.439999, 1.4399998)
+shape = SubResource("CapsuleShape2D_v7oki")

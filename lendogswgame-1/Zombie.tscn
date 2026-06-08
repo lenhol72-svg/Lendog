@@ -1,19 +1,18 @@
 [gd_scene format=3 uid="uid://d25h5kwlcst8k"]
 
-[ext_resource type="Script" uid="uid://b85df1ljk1j87" path="res://zombie.gd" id="1_g6hu2"]
-[ext_resource type="Texture2D" uid="uid://bxlkuufvuox64" path="res://assets/1.png" id="2_vrb4v"]
+[ext_resource type="Script" uid="uid://b85df1ljk1j87" path="res://zombie.gd" id="1_roy8y"]
+[ext_resource type="Texture2D" uid="uid://c2ek03c0s3bqn" path="res://assets/5.png" id="1_uiaus"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ykpkj"]
-radius = 52.0
-height = 118.0
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_roy8y"]
+radius = 10.833334
+height = 34.32836
 
-[node name="Area2D" type="Area2D" unique_id=1912125797]
-script = ExtResource("1_g6hu2")
+[node name="Area2D" type="Area2D" unique_id=564129956]
+script = ExtResource("1_roy8y")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=535718025]
-texture = ExtResource("2_vrb4v")
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1706390070]
+texture = ExtResource("1_uiaus")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1389268452]
-position = Vector2(2, 0)
-scale = Vector2(1.6, 1)
-shape = SubResource("CapsuleShape2D_ykpkj")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1448367974]
+scale = Vector2(7.2, 2.6799998)
+shape = SubResource("CapsuleShape2D_roy8y")

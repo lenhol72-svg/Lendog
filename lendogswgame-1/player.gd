@@ -1,13 +1,15 @@
 extends CharacterBody2D
 
-const SPEED = 800.0
-const DASH_SPEED = 600.0
-const DASH_DURATION = 0.15
-const DASH_COOLDOWN = 1.0
+# === MOVEMENT ===
+const SPEED = 400.0
+const DASH_SPEED = 800.0
+const DASH_TIME = 0.2
+const DASH_COOLDOWN = 0.5
+
+# === HEALTH ===
 const MAX_HEALTH = 100
 
-@export var bullet_scene: PackedScene
-
+# === STATE ===
 var health = MAX_HEALTH
 var is_dashing = false
 var dash_timer = 0.0
@@ -16,22 +18,28 @@ var dash_direction = Vector2.ZERO
 
 func _ready():
 	add_to_group("player")
+	update_health_bar()
 
 func _process(delta):
+	# Face mouse
 	look_at(get_global_mouse_position())
-
+	
+	# Shoot
 	if Input.is_action_just_pressed("shoot"):
 		shoot()
-
+	
+	# Dash cooldown
 	if dash_cooldown_timer > 0:
 		dash_cooldown_timer -= delta
-
+	
+	# Dash timer
 	if is_dashing:
 		dash_timer -= delta
 		if dash_timer <= 0:
 			is_dashing = false
 
 func _physics_process(delta):
+	# === GET INPUT ===
 	var direction = Vector2.ZERO
 	if Input.is_action_pressed("move_right"):
 		direction.x += 1
@@ -41,29 +49,27 @@ func _physics_process(delta):
 		direction.y += 1
 	if Input.is_action_pressed("move_up"):
 		direction.y -= 1
-
+	
 	direction = direction.normalized()
-
+	
+	# === DASH ===
 	if Input.is_action_just_pressed("dash") and dash_cooldown_timer <= 0 and direction != Vector2.ZERO:
 		is_dashing = true
-		dash_timer = DASH_DURATION
+		dash_timer = DASH_TIME
 		dash_cooldown_timer = DASH_COOLDOWN
 		dash_direction = direction
-
+	
+	# === MOVE ===
 	if is_dashing:
 		velocity = dash_direction * DASH_SPEED
 	else:
 		velocity = direction * SPEED
-
+	
 	move_and_slide()
 
 func shoot():
-	if bullet_scene == null:
-		print("ERROR: Bullet Scene not assigned in Inspector!")
-		return
-	
 	var gun_point = $GunPoint
-	var bullet = bullet_scene.instantiate()
+	var bullet = load("res://bullet.tscn").instantiate()
 	get_tree().current_scene.add_child(bullet)
 	bullet.global_position = gun_point.global_position
 	bullet.direction = (get_global_mouse_position() - gun_point.global_position).normalized()
@@ -71,9 +77,17 @@ func shoot():
 func take_damage(amount):
 	health -= amount
 	print("Player HP: ", health)
+	update_health_bar()
+	
 	if health <= 0:
 		die()
 
+func update_health_bar():
+	var health_bar = get_tree().current_scene.get_node("HealthBar")
+	if health_bar:
+		health_bar.value = health
+		health_bar.max_value = MAX_HEALTH
+
 func die():
-	print("YOU DIED")
+	print("YOU DIED - Game Over")
 	get_tree().reload_current_scene()
