@@ -18,28 +18,23 @@ var dash_direction = Vector2.ZERO
 
 func _ready():
 	add_to_group("player")
-	update_health_bar()
+	health = MAX_HEALTH
 
 func _process(delta):
-	# Face mouse
 	look_at(get_global_mouse_position())
 	
-	# Shoot
 	if Input.is_action_just_pressed("shoot"):
 		shoot()
 	
-	# Dash cooldown
 	if dash_cooldown_timer > 0:
 		dash_cooldown_timer -= delta
 	
-	# Dash timer
 	if is_dashing:
 		dash_timer -= delta
 		if dash_timer <= 0:
 			is_dashing = false
 
 func _physics_process(delta):
-	# === GET INPUT ===
 	var direction = Vector2.ZERO
 	if Input.is_action_pressed("move_right"):
 		direction.x += 1
@@ -52,14 +47,12 @@ func _physics_process(delta):
 	
 	direction = direction.normalized()
 	
-	# === DASH ===
 	if Input.is_action_just_pressed("dash") and dash_cooldown_timer <= 0 and direction != Vector2.ZERO:
 		is_dashing = true
 		dash_timer = DASH_TIME
 		dash_cooldown_timer = DASH_COOLDOWN
 		dash_direction = direction
 	
-	# === MOVE ===
 	if is_dashing:
 		velocity = dash_direction * DASH_SPEED
 	else:
@@ -76,18 +69,8 @@ func shoot():
 
 func take_damage(amount):
 	health -= amount
-	print("Player HP: ", health)
-	update_health_bar()
-	
-	if health <= 0:
-		die()
-
-func update_health_bar():
-	var health_bar = get_tree().current_scene.get_node("HealthBar")
-	if health_bar:
-		health_bar.value = health
-		health_bar.max_value = MAX_HEALTH
+	print("Player health: ", health)
 
 func die():
-	print("YOU DIED - Game Over")
+	print("GAME OVER")
 	get_tree().reload_current_scene()
