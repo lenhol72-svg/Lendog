@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://53r0fb64bm8u" path="res://assets/image-removebg-preview.png" id="1_4flbx"]
 [ext_resource type="Script" uid="uid://rghy66bwarb8" path="res://player.gd" id="1_onrkg"]
+[ext_resource type="Script" uid="uid://baasejfmucgtj" path="res://scripts/camera_2d.gd" id="3_i3pqv"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_onrkg"]
 radius = 256.44498
@@ -21,6 +22,12 @@ scale = Vector2(0.39999986, 0.4224602)
 shape = SubResource("CircleShape2D_onrkg")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=506294422]
+zoom = Vector2(0.5, 0.5)
+limit_enabled = false
+position_smoothing_enabled = true
+position_smoothing_speed = 2.0
+rotation_smoothing_enabled = true
+script = ExtResource("3_i3pqv")
 
 [node name="GunPoint" type="Marker2D" parent="." unique_id=1936698161]
 position = Vector2(-1, 0)
