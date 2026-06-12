@@ -9,7 +9,7 @@ var health = MAX_HEALTH
 var player = null
 var attack_timer = 0.0
 var health_bar = null
-var touching_player = false
+var is_touching_player = false
 
 func _ready():
 	add_to_group("zombies")
@@ -37,19 +37,19 @@ func _physics_process(delta):
 	if attack_timer > 0:
 		attack_timer -= delta
 	
-	# Continuous damage while touching
-	if touching_player and attack_timer <= 0:
+	if is_touching_player and attack_timer <= 0:
 		player.take_damage(DAMAGE)
 		attack_timer = ATTACK_COOLDOWN
+		print("Zombie damaging player! Health: ", player.health)
 
 func _on_area_entered(area):
-	if area == player or area.is_in_group("player"):
-		touching_player = true
+	if area.name == "CharacterBody2D" or area.is_in_group("player"):
+		is_touching_player = true
 		print("Zombie touching player!")
 
 func _on_area_exited(area):
-	if area == player or area.is_in_group("player"):
-		touching_player = false
+	if area.name == "CharacterBody2D" or area.is_in_group("player"):
+		is_touching_player = false
 		print("Zombie left player")
 
 func take_damage(amount):
