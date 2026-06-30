@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dxywjrtyf6wdc"
-path="res://.godot/imported/ChatGPT Image Jun 11, 2026, 10_24_52 AM.png-d96e9394c7790c0f6535499141774667.ctex"
+uid="uid://cu5kcmaovbim5"
+path="res://.godot/imported/Sidewalks.png-7a9988871621154514bb9253d058d9b9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/ChatGPT Image Jun 11, 2026, 10_24_52 AM.png"
-dest_files=["res://.godot/imported/ChatGPT Image Jun 11, 2026, 10_24_52 AM.png-d96e9394c7790c0f6535499141774667.ctex"]
+source_file="res://scenes/DarkRoad/NewTextures/Sidewalks.png"
+dest_files=["res://.godot/imported/Sidewalks.png-7a9988871621154514bb9253d058d9b9.ctex"]
 
 [params]
 

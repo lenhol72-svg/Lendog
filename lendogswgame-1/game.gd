@@ -7,15 +7,16 @@ var spawn_timer = 0.0
 var zombie_scene = preload("res://zombie.tscn")
 var player = null
 var player_health_bar = null
-var camera = null
 
 func _ready():
+	print("GAME STARTED")
 	player = get_tree().get_first_node_in_group("player")
-	if player:
-		camera = player.get_node("Camera2D")
+	print("Player found: ", player)
+	print("Player health: ", player.health if player else "NO PLAYER")
 	create_ui_health_bar()
 
 func create_ui_health_bar():
+	print("Creating health bar...")
 	var canvas_layer = CanvasLayer.new()
 	canvas_layer.layer = 100
 	add_child(canvas_layer)
@@ -26,7 +27,6 @@ func create_ui_health_bar():
 	player_health_bar.custom_minimum_size = Vector2(300, 30)
 	canvas_layer.add_child(player_health_bar)
 	
-	# Fix position in screen space
 	player_health_bar.anchor_left = 0.0
 	player_health_bar.anchor_top = 0.0
 	player_health_bar.anchor_right = 0.3
@@ -35,6 +35,7 @@ func create_ui_health_bar():
 	player_health_bar.offset_top = 10
 	player_health_bar.offset_right = 10
 	player_health_bar.offset_bottom = 10
+	print("Health bar created and positioned")
 
 func _process(delta):
 	spawn_timer -= delta
@@ -42,12 +43,15 @@ func _process(delta):
 		spawn_zombie()
 		spawn_timer = SPAWN_INTERVAL
 	
-	# Update player health bar
 	if player and player_health_bar:
 		player_health_bar.value = player.health
+		#print("Health bar value: ", player_health_bar.value, " Player health: ", player.health)
+	else:
+		print("ERROR: Player or health bar missing!")
 
 func spawn_zombie():
 	if zombie_scene == null:
+		print("ERROR: Zombie scene not assigned!")
 		return
 	
 	if player == null:

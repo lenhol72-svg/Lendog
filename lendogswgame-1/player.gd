@@ -15,12 +15,16 @@ var is_dashing = false
 var dash_timer = 0.0
 var dash_cooldown_timer = 0.0
 var dash_direction = Vector2.ZERO
+var is_dead = false
 
 func _ready():
 	add_to_group("player")
 	health = MAX_HEALTH
 
 func _process(delta):
+	if is_dead:
+		return
+	
 	look_at(get_global_mouse_position())
 	
 	if Input.is_action_just_pressed("shoot"):
@@ -35,6 +39,9 @@ func _process(delta):
 			is_dashing = false
 
 func _physics_process(delta):
+	if is_dead:
+		return
+	
 	var direction = Vector2.ZERO
 	if Input.is_action_pressed("move_right"):
 		direction.x += 1
@@ -68,9 +75,18 @@ func shoot():
 	bullet.direction = (get_global_mouse_position() - gun_point.global_position).normalized()
 
 func take_damage(amount):
+	if is_dead:
+		return
+	
 	health -= amount
-	print("Player health: ", health)
+	print("Player took ", amount, " damage! Health: ", health)
+	
+	if health <= 0:
+		health = 0
+		die()
 
 func die():
-	print("GAME OVER")
+	is_dead = true
+	print("PLAYER DEAD! GAME OVER")
+	await get_tree().create_timer(0.2).timeout
 	get_tree().reload_current_scene()

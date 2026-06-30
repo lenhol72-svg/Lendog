@@ -3,20 +3,19 @@ extends Area2D
 const SPEED = 100.0
 const MAX_HEALTH = 50
 const DAMAGE = 10
-const ATTACK_COOLDOWN = 1.0
+const ATTACK_COOLDOWN = 0.5
 
 var health = MAX_HEALTH
 var player = null
 var attack_timer = 0.0
 var health_bar = null
-var is_touching_player = false
 
 func _ready():
 	add_to_group("zombies")
 	player = get_tree().get_first_node_in_group("player")
 	area_entered.connect(_on_area_entered)
-	area_exited.connect(_on_area_exited)
 	create_health_bar()
+	print("Zombie ready, player: ", player)
 
 func create_health_bar():
 	health_bar = ProgressBar.new()
@@ -37,20 +36,17 @@ func _physics_process(delta):
 	if attack_timer > 0:
 		attack_timer -= delta
 	
-	if is_touching_player and attack_timer <= 0:
+	# Check distance and damage continuously
+	var distance = global_position.distance_to(player.global_position)
+	if distance < 50 and attack_timer <= 0:
 		player.take_damage(DAMAGE)
 		attack_timer = ATTACK_COOLDOWN
-		print("Zombie damaging player! Health: ", player.health)
+		print("ZOMBIE DAMAGE! Player health: ", player.health)
 
 func _on_area_entered(area):
-	if area.name == "CharacterBody2D" or area.is_in_group("player"):
-		is_touching_player = true
-		print("Zombie touching player!")
-
-func _on_area_exited(area):
-	if area.name == "CharacterBody2D" or area.is_in_group("player"):
-		is_touching_player = false
-		print("Zombie left player")
+	print("Area entered: ", area.name)
+	if area.is_in_group("player"):
+		print("Hit player!")
 
 func take_damage(amount):
 	health -= amount

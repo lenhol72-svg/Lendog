@@ -6,7 +6,7 @@
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_v7oki"]
 
 [node name="Area2D" type="Area2D" unique_id=2082571031]
-scale = Vector2(0.012832119, 0.18071887)
+scale = Vector2(0.043498572, 0.5083073)
 script = ExtResource("1_v8qja")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=755309367]

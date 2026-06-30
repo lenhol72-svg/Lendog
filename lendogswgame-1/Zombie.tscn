@@ -1,18 +1,22 @@
 [gd_scene format=3 uid="uid://d25h5kwlcst8k"]
 
 [ext_resource type="Script" uid="uid://b85df1ljk1j87" path="res://zombie.gd" id="1_roy8y"]
-[ext_resource type="Texture2D" uid="uid://c2ek03c0s3bqn" path="res://assets/5.png" id="1_uiaus"]
+[ext_resource type="Texture2D" uid="uid://3rf38ws3qbdq" path="res://assets/image-removebg-preview (1).png" id="2_roy8y"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_roy8y"]
 radius = 10.833334
-height = 34.32836
+height = 37.313435
 
 [node name="Area2D" type="Area2D" unique_id=940332776]
+scale = Vector2(0.45184875, 0.54827166)
 script = ExtResource("1_roy8y")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1706390070]
-texture = ExtResource("1_uiaus")
+position = Vector2(1.0000076, 24)
+scale = Vector2(0.50461894, 0.31455806)
+texture = ExtResource("2_roy8y")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1448367974]
+position = Vector2(2, 1.9999994)
 scale = Vector2(7.2, 2.6799998)
 shape = SubResource("CapsuleShape2D_roy8y")
