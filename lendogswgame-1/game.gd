@@ -1,7 +1,7 @@
 extends Node2D
 
-const SPAWN_INTERVAL = 3.0
-const SPAWN_DISTANCE = 400.0
+const SPAWN_INTERVAL = 0.33
+const SPAWN_DISTANCE = 550.0
 
 var spawn_timer = 0.0
 var zombie_scene = preload("res://zombie.tscn")
@@ -24,7 +24,7 @@ func create_ui_health_bar():
 	player_health_bar = ProgressBar.new()
 	player_health_bar.max_value = 100
 	player_health_bar.value = 100
-	player_health_bar.custom_minimum_size = Vector2(300, 30)
+	player_health_bar.custom_minimum_size = Vector2(150, 15)
 	canvas_layer.add_child(player_health_bar)
 	
 	player_health_bar.anchor_left = 0.0
