@@ -1,9 +1,9 @@
 extends Area2D
 
-const SPEED = 250.0
+const SPEED = 350.0
 const MAX_HEALTH = 25
 const DAMAGE = 10
-const ATTACK_COOLDOWN = 0.2
+const ATTACK_COOLDOWN = 0.4
 
 var health = MAX_HEALTH
 var player = null
@@ -13,8 +13,7 @@ var health_bar = null
 func _ready():
 	add_to_group("zombies")
 	player = get_tree().get_first_node_in_group("player")
-	area_entered.connect(_on_area_entered)
-	print("Zombie ready, player: ", player)
+	area_entered.connect(_on_area_entered)   
 
 
 func _physics_process(delta):
