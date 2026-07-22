@@ -5,6 +5,7 @@ const SPAWN_DISTANCE = 550.0
 
 var spawn_timer = 0.0
 var zombie_scene = preload("res://zombie.tscn")
+var healing_pack_scene = preload("res://healing_pack.tscn")
 var player = null
 var player_health_bar = null
 
@@ -45,7 +46,6 @@ func _process(delta):
 	
 	if player and player_health_bar:
 		player_health_bar.value = player.health
-		#print("Health bar value: ", player_health_bar.value, " Player health: ", player.health)
 	else:
 		print("ERROR: Player or health bar missing!")
 
@@ -64,3 +64,13 @@ func spawn_zombie():
 	var angle = randf() * TAU
 	var spawn_pos = player.global_position + Vector2(cos(angle), sin(angle)) * SPAWN_DISTANCE
 	zombie.global_position = spawn_pos
+
+func spawn_healing_pack(position):
+	if healing_pack_scene == null:
+		print("ERROR: Healing pack scene not found!")
+		return
+	
+	var pack = healing_pack_scene.instantiate()
+	add_child(pack)
+	pack.global_position = position
+	print("Healing pack spawned at: ", position)

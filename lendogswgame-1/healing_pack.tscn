@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://dlkjrdh1irh18"]
+
+[ext_resource type="Texture2D" uid="uid://bmhp2ktgc5pdp" path="res://assets/Chug_Jug_29_-_Item_-_Fortnite-removebg-preview.png" id="1_dxk42"]
+[ext_resource type="Script" uid="uid://2d6ebej6m5qr" path="res://healing_pack.gd" id="1_ujdxw"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ujdxw"]
+
+[node name="Area2D" type="Area2D" unique_id=558784929]
+position = Vector2(15, 16)
+scale = Vector2(0.14348619, 0.15413167)
+script = ExtResource("1_ujdxw")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1236869947]
+texture = ExtResource("1_dxk42")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1953555568]
+position = Vector2(-2, -4)
+rotation = 0.32081825
+scale = Vector2(23, 23)
+shape = SubResource("CircleShape2D_ujdxw")

@@ -13,8 +13,16 @@ var health_bar = null
 func _ready():
 	add_to_group("zombies")
 	player = get_tree().get_first_node_in_group("player")
-	area_entered.connect(_on_area_entered)   
+	area_entered.connect(_on_area_entered)
+	create_health_bar()
 
+func create_health_bar():
+	health_bar = ProgressBar.new()
+	health_bar.max_value = MAX_HEALTH
+	health_bar.value = MAX_HEALTH
+	health_bar.custom_minimum_size = Vector2(50, 10)
+	add_child(health_bar)
+	health_bar.position = Vector2(-25, -40)
 
 func _physics_process(delta):
 	if player == null:
@@ -27,7 +35,6 @@ func _physics_process(delta):
 	if attack_timer > 0:
 		attack_timer -= delta
 	
-	# Check distance and damage continuously
 	var distance = global_position.distance_to(player.global_position)
 	if distance < 50 and attack_timer <= 0:
 		player.take_damage(DAMAGE)
@@ -50,4 +57,5 @@ func take_damage(amount):
 
 func die():
 	print("Zombie died!")
+	get_tree().current_scene.spawn_healing_pack(global_position)
 	queue_free()
