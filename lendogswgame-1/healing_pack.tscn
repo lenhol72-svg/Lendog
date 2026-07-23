@@ -7,7 +7,7 @@
 
 [node name="Area2D" type="Area2D" unique_id=558784929]
 position = Vector2(15, 16)
-scale = Vector2(0.14348619, 0.15413167)
+scale = Vector2(-0.10178604, -0.08326894)
 script = ExtResource("1_ujdxw")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1236869947]

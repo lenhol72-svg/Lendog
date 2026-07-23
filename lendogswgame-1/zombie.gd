@@ -13,7 +13,6 @@ var health_bar = null
 func _ready():
 	add_to_group("zombies")
 	player = get_tree().get_first_node_in_group("player")
-	area_entered.connect(_on_area_entered)
 	create_health_bar()
 
 func create_health_bar():
@@ -39,16 +38,9 @@ func _physics_process(delta):
 	if distance < 50 and attack_timer <= 0:
 		player.take_damage(DAMAGE)
 		attack_timer = ATTACK_COOLDOWN
-		print("ZOMBIE DAMAGE! Player health: ", player.health)
-
-func _on_area_entered(area):
-	print("Area entered: ", area.name)
-	if area.is_in_group("player"):
-		print("Hit player!")
 
 func take_damage(amount):
 	health -= amount
-	print("Zombie took damage: ", amount, " HP: ", health)
 	if health_bar:
 		health_bar.value = health
 	
@@ -56,6 +48,5 @@ func take_damage(amount):
 		die()
 
 func die():
-	print("Zombie died!")
-	get_tree().current_scene.spawn_healing_pack(global_position)
+	get_tree().current_scene.zombie_killed()
 	queue_free()
