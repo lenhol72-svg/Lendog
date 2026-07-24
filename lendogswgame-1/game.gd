@@ -3,6 +3,7 @@ extends Node2D
 const SPAWN_INTERVAL = 0.33
 const SPAWN_DISTANCE = 550.0
 const HEALING_DROP_INTERVAL = 5
+const HEALING_DROP_DISTANCE = 100.0
 
 var spawn_timer = 0.0
 var zombie_scene = preload("res://zombie.tscn")
@@ -46,7 +47,6 @@ func create_ui_counters():
 	canvas_layer.layer = 100
 	add_child(canvas_layer)
 	
-	# Kill counter
 	kill_count_label = Label.new()
 	kill_count_label.text = "Kills: 0"
 	kill_count_label.add_theme_font_size_override("font_size", 24)
@@ -56,7 +56,6 @@ func create_ui_counters():
 	kill_count_label.offset_left = -150
 	kill_count_label.offset_top = 10
 	
-	# Healing packs counter
 	healing_count_label = Label.new()
 	healing_count_label.text = "Healed: 0"
 	healing_count_label.add_theme_font_size_override("font_size", 24)
@@ -92,8 +91,12 @@ func spawn_healing_pack(position):
 	
 	var pack = healing_pack_scene.instantiate()
 	add_child(pack)
-	pack.global_position = position
-	print("Healing pack spawned!")
+	
+	# Spawn away from player so it doesn't get picked up instantly
+	var angle = randf() * TAU
+	var drop_pos = position + Vector2(cos(angle), sin(angle)) * HEALING_DROP_DISTANCE
+	pack.global_position = drop_pos
+	print("Healing pack dropped at: ", drop_pos)
 
 func zombie_killed():
 	kill_count += 1

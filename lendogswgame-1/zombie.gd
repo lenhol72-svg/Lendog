@@ -1,6 +1,6 @@
 extends Area2D
 
-const SPEED = 350.0
+const SPEED = 250.0
 const MAX_HEALTH = 25
 const DAMAGE = 10
 const ATTACK_COOLDOWN = 0.4
