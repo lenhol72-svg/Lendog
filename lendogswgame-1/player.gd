@@ -2,9 +2,9 @@ extends CharacterBody2D
 
 # === MOVEMENT ===
 const SPEED = 400.0
-const DASH_SPEED = 10000.0
-const DASH_TIME = 0.005
-const DASH_COOLDOWN = 0.1
+const DASH_SPEED = 1000.0
+const DASH_TIME = 0.3
+const DASH_COOLDOWN = 0.3
 
 # === HEALTH ===
 const MAX_HEALTH = 100
