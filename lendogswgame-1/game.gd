@@ -1,11 +1,15 @@
 extends Node2D
 
-const SPAWN_INTERVAL = 0.33
+const INITIAL_SPAWN_INTERVAL = 1.0
+const MIN_SPAWN_INTERVAL = 0.1
 const SPAWN_DISTANCE = 550.0
 const HEALING_DROP_INTERVAL = 5
 const HEALING_DROP_DISTANCE = 100.0
+const DIFFICULTY_INCREASE_RATE = 0.02
 
 var spawn_timer = 0.0
+var current_spawn_interval = INITIAL_SPAWN_INTERVAL
+var difficulty_timer = 0.0
 var zombie_scene = preload("res://zombie.tscn")
 var healing_pack_scene = preload("res://healing_pack.tscn")
 var player = null
@@ -14,6 +18,7 @@ var kill_count = 0
 var healing_packs_picked_up = 0
 var kill_count_label = null
 var healing_count_label = null
+var difficulty_label = null
 
 func _ready():
 	print("GAME STARTED")
@@ -21,6 +26,8 @@ func _ready():
 	print("Player found: ", player)
 	create_ui_health_bar()
 	create_ui_counters()
+	create_difficulty_display()
+	create_control_list()
 
 func create_ui_health_bar():
 	var canvas_layer = CanvasLayer.new()
@@ -65,11 +72,46 @@ func create_ui_counters():
 	healing_count_label.offset_left = -150
 	healing_count_label.offset_top = 50
 
+func create_difficulty_display():
+	var canvas_layer = CanvasLayer.new()
+	canvas_layer.layer = 100
+	add_child(canvas_layer)
+	
+	difficulty_label = Label.new()
+	difficulty_label.text = "Spawn Rate: 1.00s"
+	difficulty_label.add_theme_font_size_override("font_size", 20)
+	canvas_layer.add_child(difficulty_label)
+	difficulty_label.anchor_left = 0.5
+	difficulty_label.anchor_top = 0.0
+	difficulty_label.offset_left = -75
+	difficulty_label.offset_top = 10
+
+func create_control_list():
+	var canvas_layer = CanvasLayer.new()
+	canvas_layer.layer = 100
+	add_child(canvas_layer)
+	
+	var controls_label = Label.new()
+	controls_label.text = "CONTROLS\nW - Move Up\nA - Move Left\nS - Move Down\nD - Move Right\nMouse - Aim\nLeft Click - Shoot\nSpace - Dash\nScroll - Zoom"
+	controls_label.add_theme_font_size_override("font_size", 16)
+	canvas_layer.add_child(controls_label)
+	
+	controls_label.anchor_left = 0.0
+	controls_label.anchor_top = 0.0
+	controls_label.offset_left = 10
+	controls_label.offset_top = 50
+
 func _process(delta):
+	difficulty_timer += delta
+	current_spawn_interval -= DIFFICULTY_INCREASE_RATE * delta
+	current_spawn_interval = max(current_spawn_interval, MIN_SPAWN_INTERVAL)
+	
+	difficulty_label.text = "Spawn Rate: %.2fs" % current_spawn_interval
+	
 	spawn_timer -= delta
 	if spawn_timer <= 0:
 		spawn_zombie()
-		spawn_timer = SPAWN_INTERVAL
+		spawn_timer = current_spawn_interval
 	
 	if player and player_health_bar:
 		player_health_bar.value = player.health
@@ -92,7 +134,6 @@ func spawn_healing_pack(position):
 	var pack = healing_pack_scene.instantiate()
 	add_child(pack)
 	
-	# Spawn away from player so it doesn't get picked up instantly
 	var angle = randf() * TAU
 	var drop_pos = position + Vector2(cos(angle), sin(angle)) * HEALING_DROP_DISTANCE
 	pack.global_position = drop_pos
