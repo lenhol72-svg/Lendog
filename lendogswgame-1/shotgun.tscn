@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://cfy2jigmsybrn"]
+
+[ext_resource type="Script" uid="uid://dp4mncwyb1637" path="res://shotgun.gd" id="1_5bb75"]
+[ext_resource type="Texture2D" uid="uid://c07bq5b5pvhvx" path="res://assets/image-removebg-preview (2).png" id="1_hn68x"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_g4v7s"]
+radius = 22.203604
+
+[node name="Area2D" type="Area2D" unique_id=1721838897]
+scale = Vector2(4.4430017, 3.2757034)
+script = ExtResource("1_5bb75")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=142390102]
+texture = ExtResource("1_hn68x")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=363965056]
+position = Vector2(-2, -3)
+shape = SubResource("CircleShape2D_g4v7s")

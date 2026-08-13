@@ -1,24 +1,32 @@
 extends Node2D
 
 const INITIAL_SPAWN_INTERVAL = 1.0
-const MIN_SPAWN_INTERVAL = 0.1
+const MIN_SPAWN_INTERVAL = 0.2
 const SPAWN_DISTANCE = 550.0
 const HEALING_DROP_INTERVAL = 5
 const HEALING_DROP_DISTANCE = 100.0
-const DIFFICULTY_INCREASE_RATE = 0.02
+const DIFFICULTY_INCREASE_RATE = 0.01
+const SHOTGUN_SPAWN_RATE = 0.3
+const SHOTGUN_RESPAWN_INTERVAL = 30.0
 
 var spawn_timer = 0.0
 var current_spawn_interval = INITIAL_SPAWN_INTERVAL
 var difficulty_timer = 0.0
+var shotgun_respawn_timer = SHOTGUN_RESPAWN_INTERVAL
 var zombie_scene = preload("res://zombie.tscn")
 var healing_pack_scene = preload("res://healing_pack.tscn")
+var shotgun_scene = preload("res://shotgun.tscn")
 var player = null
 var player_health_bar = null
 var kill_count = 0
 var healing_packs_picked_up = 0
+var shotguns_picked_up = 0
 var kill_count_label = null
 var healing_count_label = null
+var shotgun_count_label = null
 var difficulty_label = null
+var shotgun_timer_label = null
+var shotgun_spawned = false
 
 func _ready():
 	print("GAME STARTED")
@@ -28,6 +36,7 @@ func _ready():
 	create_ui_counters()
 	create_difficulty_display()
 	create_control_list()
+	create_shotgun_timer_display()
 
 func create_ui_health_bar():
 	var canvas_layer = CanvasLayer.new()
@@ -71,6 +80,15 @@ func create_ui_counters():
 	healing_count_label.anchor_top = 0.0
 	healing_count_label.offset_left = -150
 	healing_count_label.offset_top = 50
+	
+	shotgun_count_label = Label.new()
+	shotgun_count_label.text = "Shotguns: 0"
+	shotgun_count_label.add_theme_font_size_override("font_size", 24)
+	canvas_layer.add_child(shotgun_count_label)
+	shotgun_count_label.anchor_left = 1.0
+	shotgun_count_label.anchor_top = 0.0
+	shotgun_count_label.offset_left = -150
+	shotgun_count_label.offset_top = 90
 
 func create_difficulty_display():
 	var canvas_layer = CanvasLayer.new()
@@ -101,12 +119,44 @@ func create_control_list():
 	controls_label.offset_left = 10
 	controls_label.offset_top = 50
 
+func create_shotgun_timer_display():
+	var canvas_layer = CanvasLayer.new()
+	canvas_layer.layer = 100
+	add_child(canvas_layer)
+	
+	shotgun_timer_label = Label.new()
+	shotgun_timer_label.text = "Shotgun: Respawning in 30s"
+	shotgun_timer_label.add_theme_font_size_override("font_size", 20)
+	canvas_layer.add_child(shotgun_timer_label)
+	
+	shotgun_timer_label.anchor_left = 0.5
+	shotgun_timer_label.anchor_top = 1.0
+	shotgun_timer_label.offset_left = -150
+	shotgun_timer_label.offset_top = -30
+
 func _process(delta):
+	# Increase difficulty over time
 	difficulty_timer += delta
 	current_spawn_interval -= DIFFICULTY_INCREASE_RATE * delta
 	current_spawn_interval = max(current_spawn_interval, MIN_SPAWN_INTERVAL)
 	
+	# Update difficulty display
 	difficulty_label.text = "Spawn Rate: %.2fs" % current_spawn_interval
+	
+	# Spawn shotgun when spawn rate hits 0.3 first time
+	if current_spawn_interval <= SHOTGUN_SPAWN_RATE and not shotgun_spawned:
+		print("Spawn rate reached 0.3! Shotgun dropped!")
+		spawn_shotgun(player.global_position)
+		shotgun_spawned = true
+		shotgun_respawn_timer = SHOTGUN_RESPAWN_INTERVAL
+	
+	# Respawn shotgun every 30 seconds after first spawn
+	if shotgun_spawned:
+		shotgun_respawn_timer -= delta
+		if shotgun_respawn_timer <= 0:
+			print("Shotgun respawned!")
+			spawn_shotgun(player.global_position)
+			shotgun_respawn_timer = SHOTGUN_RESPAWN_INTERVAL
 	
 	spawn_timer -= delta
 	if spawn_timer <= 0:
@@ -115,6 +165,13 @@ func _process(delta):
 	
 	if player and player_health_bar:
 		player_health_bar.value = player.health
+	
+	# Update shotgun timer display
+	if shotgun_timer_label and player:
+		if player.has_shotgun:
+			shotgun_timer_label.text = "Shotgun Active: %.1fs" % player.shotgun_timer
+		else:
+			shotgun_timer_label.text = "Shotgun Respawning: %.1fs" % shotgun_respawn_timer
 
 func spawn_zombie():
 	if zombie_scene == null or player == null:
@@ -139,6 +196,19 @@ func spawn_healing_pack(position):
 	pack.global_position = drop_pos
 	print("Healing pack dropped at: ", drop_pos)
 
+func spawn_shotgun(position):
+	if shotgun_scene == null:
+		print("ERROR: Shotgun scene not found!")
+		return
+	
+	var shotgun = shotgun_scene.instantiate()
+	add_child(shotgun)
+	
+	var angle = randf() * TAU
+	var drop_pos = position + Vector2(cos(angle), sin(angle)) * HEALING_DROP_DISTANCE
+	shotgun.global_position = drop_pos
+	print("SHOTGUN SPAWNED at: ", drop_pos)
+
 func zombie_killed():
 	kill_count += 1
 	kill_count_label.text = "Kills: " + str(kill_count)
@@ -152,3 +222,9 @@ func healing_pack_picked_up():
 	healing_packs_picked_up += 1
 	healing_count_label.text = "Healed: " + str(healing_packs_picked_up)
 	print("Healing packs picked up: ", healing_packs_picked_up)
+
+func shotgun_picked_up():
+	shotguns_picked_up += 1
+	shotgun_count_label.text = "Shotguns: " + str(shotguns_picked_up)
+	shotgun_respawn_timer = SHOTGUN_RESPAWN_INTERVAL
+	print("Shotguns picked up: ", shotguns_picked_up)

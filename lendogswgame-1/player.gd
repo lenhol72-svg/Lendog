@@ -2,12 +2,17 @@ extends CharacterBody2D
 
 # === MOVEMENT ===
 const SPEED = 400.0
-const DASH_SPEED = 1000.0
-const DASH_TIME = 0.3
-const DASH_COOLDOWN = 0.3
+const DASH_SPEED = 800.0
+const DASH_TIME = 0.2
+const DASH_COOLDOWN = 0.5
 
 # === HEALTH ===
 const MAX_HEALTH = 100
+
+# === SHOTGUN ===
+var has_shotgun = false
+var shotgun_timer = 0.0
+const SHOTGUN_DURATION = 15.0
 
 # === STATE ===
 var health = MAX_HEALTH
@@ -20,10 +25,18 @@ var is_dead = false
 func _ready():
 	add_to_group("player")
 	health = MAX_HEALTH
+	z_index = 10
 
 func _process(delta):
 	if is_dead:
 		return
+	
+	# Shotgun timer
+	if has_shotgun:
+		shotgun_timer -= delta
+		if shotgun_timer <= 0:
+			has_shotgun = false
+			print("Shotgun expired! Get the next one in 30 seconds")
 	
 	look_at(get_global_mouse_position())
 	
@@ -69,10 +82,24 @@ func _physics_process(delta):
 
 func shoot():
 	var gun_point = $GunPoint
-	var bullet = load("res://bullet.tscn").instantiate()
-	get_tree().current_scene.add_child(bullet)
-	bullet.global_position = gun_point.global_position
-	bullet.direction = (get_global_mouse_position() - gun_point.global_position).normalized()
+	
+	if has_shotgun:
+		# Shotgun: 5 bullets in a spread
+		for i in range(5):
+			var angle_offset = (i - 2) * 15
+			var direction = (get_global_mouse_position() - gun_point.global_position).normalized()
+			direction = direction.rotated(deg_to_rad(angle_offset))
+			
+			var bullet = load("res://bullet.tscn").instantiate()
+			get_tree().current_scene.add_child(bullet)
+			bullet.global_position = gun_point.global_position
+			bullet.direction = direction
+	else:
+		# Normal: 1 bullet
+		var bullet = load("res://bullet.tscn").instantiate()
+		get_tree().current_scene.add_child(bullet)
+		bullet.global_position = gun_point.global_position
+		bullet.direction = (get_global_mouse_position() - gun_point.global_position).normalized()
 
 func take_damage(amount):
 	if is_dead:
@@ -85,8 +112,13 @@ func take_damage(amount):
 		health = 0
 		die()
 
+func activate_shotgun():
+	has_shotgun = true
+	shotgun_timer = SHOTGUN_DURATION
+	print("SHOTGUN ACTIVATED! 15 second duration")
+
 func die():
 	is_dead = true
 	print("PLAYER DEAD! GAME OVER")
-	await get_tree().create_timer(0.2).timeout
+	await get_tree().create_timer(2.0).timeout
 	get_tree().reload_current_scene()
