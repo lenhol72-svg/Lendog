@@ -1,18 +1,20 @@
 [gd_scene format=3 uid="uid://cfy2jigmsybrn"]
 
 [ext_resource type="Script" uid="uid://dp4mncwyb1637" path="res://shotgun.gd" id="1_5bb75"]
-[ext_resource type="Texture2D" uid="uid://c07bq5b5pvhvx" path="res://assets/image-removebg-preview (2).png" id="1_hn68x"]
+[ext_resource type="Texture2D" uid="uid://dh4kc2508cvyr" path="res://assets/image-removebg-preview (3).png" id="2_5bb75"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_g4v7s"]
-radius = 22.203604
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_07v5w"]
+size = Vector2(16.733778, 13.93938)
 
 [node name="Area2D" type="Area2D" unique_id=1721838897]
-scale = Vector2(4.4430017, 3.2757034)
+scale = Vector2(0.4131436, 0.30699754)
 script = ExtResource("1_5bb75")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=142390102]
-texture = ExtResource("1_hn68x")
+texture = ExtResource("2_5bb75")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=363965056]
-position = Vector2(-2, -3)
-shape = SubResource("CircleShape2D_g4v7s")
+position = Vector2(12.351722, 3.6604514)
+rotation = -0.7237572
+scale = Vector2(18.440105, 4.7832093)
+shape = SubResource("RectangleShape2D_07v5w")
