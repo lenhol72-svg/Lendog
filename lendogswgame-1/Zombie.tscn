@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://3rf38ws3qbdq" path="res://assets/image-removebg-preview (1).png" id="2_roy8y"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_roy8y"]
-radius = 11.095251
+radius = 11.373029
 height = 37.313435
 
 [node name="Area2D" type="Area2D" unique_id=940332776]
@@ -17,6 +17,6 @@ scale = Vector2(0.50461894, 0.31455806)
 texture = ExtResource("2_roy8y")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1448367974]
-position = Vector2(2.3841858e-07, 1.1920929e-07)
+position = Vector2(-2.3841858e-07, 0)
 scale = Vector2(7.2, 2.6799998)
 shape = SubResource("CapsuleShape2D_roy8y")
