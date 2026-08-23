@@ -1,15 +1,16 @@
-[gd_scene format=3 uid="uid://cghfc2nda0dm2"]
+[gd_scene load_steps=3 format=3 uid="uid://cghfc2nda0dm2"]
 
-[ext_resource type="Texture2D" uid="uid://cx1dihlyxcpjn" path="res://icon.svg" id="1_3u8ya"]
+[ext_resource type="Texture2D" uid="uid://bjpe6mrvmj0gc" path="res://assets/egg.jpg" id="1_3u8ya"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
-size = Vector2(126, 128)
+[sub_resource type="CircleShape2D" id="CircleShape2D_dw7mk"]
+radius = 114.26029
 
-[node name="StaticBody2D" type="StaticBody2D" unique_id=1151290849]
+[node name="StaticBody2D" type="StaticBody2D"]
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1526269937]
+[node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_3u8ya")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=576407243]
-position = Vector2(1, 0)
-shape = SubResource("RectangleShape2D_g4v7s")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1, 34)
+scale = Vector2(1.5406572, 2.1657164)
+shape = SubResource("CircleShape2D_dw7mk")
