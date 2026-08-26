@@ -8,6 +8,7 @@ const HEALING_DROP_DISTANCE = 100.0
 const DIFFICULTY_INCREASE_RATE = 0.01
 const SHOTGUN_SPAWN_RATE = 0.3
 const SHOTGUN_RESPAWN_INTERVAL = 30.0
+const MUSIC_VOLUME = -45
 
 var spawn_timer = 0.0
 var current_spawn_interval = INITIAL_SPAWN_INTERVAL
@@ -16,6 +17,7 @@ var shotgun_respawn_timer = SHOTGUN_RESPAWN_INTERVAL
 var zombie_scene = preload("res://zombie.tscn")
 var healing_pack_scene = preload("res://healing_pack.tscn")
 var shotgun_scene = preload("res://shotgun.tscn")
+var background_music_file = preload("res://assets/background_music.mp3.mp3")
 var player = null
 var player_health_bar = null
 var kill_count = 0
@@ -27,16 +29,29 @@ var shotgun_count_label = null
 var difficulty_label = null
 var shotgun_timer_label = null
 var shotgun_spawned = false
+var background_music = null
 
 func _ready():
+	add_to_group("game_manager")
 	print("GAME STARTED")
 	player = get_tree().get_first_node_in_group("player")
 	print("Player found: ", player)
+	
+	play_background_music()
 	create_ui_health_bar()
 	create_ui_counters()
 	create_difficulty_display()
 	create_control_list()
 	create_shotgun_timer_display()
+
+func play_background_music():
+	background_music = AudioStreamPlayer.new()
+	add_child(background_music)
+	background_music.stream = background_music_file
+	background_music.volume_db = MUSIC_VOLUME
+	background_music.bus = "Master"
+	background_music.play()
+	print("Background music started playing at volume: ", MUSIC_VOLUME)
 
 func create_ui_health_bar():
 	var canvas_layer = CanvasLayer.new()
@@ -135,22 +150,22 @@ func create_shotgun_timer_display():
 	shotgun_timer_label.offset_top = -30
 
 func _process(delta):
-	# Increase difficulty over time
 	difficulty_timer += delta
 	current_spawn_interval -= DIFFICULTY_INCREASE_RATE * delta
 	current_spawn_interval = max(current_spawn_interval, MIN_SPAWN_INTERVAL)
 	
-	# Update difficulty display
 	difficulty_label.text = "Spawn Rate: %.2fs" % current_spawn_interval
 	
-	# Spawn shotgun when spawn rate hits 0.3 first time
+	# Restart music if it stopped
+	if background_music and not background_music.playing:
+		background_music.play()
+	
 	if current_spawn_interval <= SHOTGUN_SPAWN_RATE and not shotgun_spawned:
 		print("Spawn rate reached 0.3! Shotgun dropped!")
 		spawn_shotgun(player.global_position)
 		shotgun_spawned = true
 		shotgun_respawn_timer = SHOTGUN_RESPAWN_INTERVAL
 	
-	# Respawn shotgun every 30 seconds after first spawn
 	if shotgun_spawned:
 		shotgun_respawn_timer -= delta
 		if shotgun_respawn_timer <= 0:
@@ -166,7 +181,6 @@ func _process(delta):
 	if player and player_health_bar:
 		player_health_bar.value = player.health
 	
-	# Update shotgun timer display
 	if shotgun_timer_label and player:
 		if player.has_shotgun:
 			shotgun_timer_label.text = "Shotgun Active: %.1fs" % player.shotgun_timer
